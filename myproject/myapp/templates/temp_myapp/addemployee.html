@@ -1,0 +1,332 @@
+
+{% extends "temp_myapp/base.html" %}
+{% load static %}
+{% block content %}
+
+{% include 'temp_myapp/navbar.html' %}
+
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/addemployee.css' %}">
+    <script src="{% static 'js/datatable.js' %}"></script>
+</head>
+
+
+
+
+
+
+
+<div class="content-wrapper">
+    <div class="container-fluid">
+        <div class="row pt-2 pb-2">
+            <div class="col-sm-12 mt-3">
+                <h5 class="page-title">EMPLOYEE LIST</h5>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <div class="row">
+                            <div class="col-lg-10">
+                                <div class="d-flex justify-content-start">
+                                    <button type="button" class="btn btn-primary btn-round waves-effect waves-light m-1" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">
+                                        <i class="fa fa-plus"></i> <span>&nbsp;ADD EMPLOYEE</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            
+                            <div class="col-lg-2">
+                                <div class="d-flex justify-content-end">
+                                    <form action="" method="post" class="d-flex">
+                                        {% csrf_token %}
+                                        <input type="search" class="form-control me-2" name="searchquery" value="{{ query }}">
+                                        <button class="btn btn-primary" name="search">Search</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                                      
+                        
+
+                    </div>
+
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="defaultdatatable" class="table table-bordered table-hover table-striped tables">
+                                <thead>
+                                    <tr>
+                                        <th>CODE</th>
+                                        <th>FIRST NAME</th>
+                                        <th>MIDDLE NAME</th>
+                                        <th>LAST NAME</th>
+                                        <th>BRANCH</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for user in student_list %}
+                                    <tr>
+
+                                        <td>{{ user.code }}</td>
+                                        <td>{{ user.firstname }}</td>
+                                        <td>{{ user.middlename }}</td>
+                                        <td>{{ user.lastname }}</td>
+                                        <td>{{ user.branch }}</td>
+                                        <td>
+                                            
+                                               
+                                            <a class="material-symbols-outlined btn btn-success" href="{% url 'user_profile' user.id %}">
+                                            wysiwyg
+                                            </a>
+
+                                           <span class="material-symbols-outlined btn btn-primary edit-btn" data-bs-toggle="modal" data-bs-target="#updateEmployeeModal_{{user.id}}">
+                                                edit
+                                           </span>
+                                         
+
+                                            <span class="material-symbols-outlined btn btn-danger delete-btn" data-bs-toggle="modal" data-bs-target="#deleteEmployeeModal_{{user.id}}">
+                                                    delete
+                                            </span>
+                                                    <!-- nov 28 -->
+
+                                                
+                                        </td>
+
+                                    </tr>
+                          
+                            
+                        </div>
+
+
+
+
+
+
+
+
+<!-- update EMPLOYEE modal -->
+<div class="modal fade" id="updateEmployeeModal_{{ user.id }}" tabindex="-1" aria-labelledby="updateEmployeeModal_{{user.id}}" aria-hidden="true">
+    <div class="modal-dialog">
+      <form action="{% url 'addemployee' %}" method="post">
+        {% csrf_token %}
+   
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="updateEmployeeModal_{{ user.id}}">Edit Employee</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" name="id" value="{{user.id}}">
+          <div class="">
+            <label for="firstname" >First Name</label>
+            <input type="text" name="firstname" class="form-control" value="{{user.firstname}}" id="firstname" required>
+          </div>
+          
+
+          <div class="">
+            <label for="middlename" >Middle Name</label>
+            <input type="text" name="middlename" class="form-control" value="{{user.middlename}}" id="middlename" required>
+          </div>
+         
+          <div class="">
+            <label for="lastname" >Last Name</label>
+            <input type="text" name="lastname" class="form-control" value="{{user.lastname}}" id="lastname" required>
+          </div>
+
+          <div class="">
+            <label for="branch" >Branch</label>
+            <input type="text" name="branch" class="form-control" value="{{user.branch}}" id="branch" required>
+          </div>
+
+     
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" name="update" data-user-id="{{ user.id }}">update student</button>
+        </div>
+      </div>
+    </form>
+    </div>
+  </div>
+
+
+
+
+      <!-- delete MODAL EMPLOYEE -->
+      <div class="modal fade" id="deleteEmployeeModal_{{user.id}}" tabindex="-1" aria-labelledby="deleteEmployeeModal_{{user.id}}" aria-hidden="true">
+        <div class="modal-dialog">
+          <form action="" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="id" value="{{user.id}}">
+        
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="deleteEmployeeModal_{{user.id}}">Delete Employee</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+             
+              <p>are you sure you want to delete?</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-danger" name="delete">delete student</button>
+            </div>
+          </div>
+        </form>
+        </div>
+      </div>
+
+
+  {% endfor %}
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+{% comment %} MODALS {% endcomment %}
+
+
+<!-- ADD EMPLOYEE Modal -->
+<div class="modal fade" id="addEmployeeModal" tabindex="-1" aria-labelledby="addEmployeeModal" aria-hidden="true">
+    <div class="modal-dialog">
+      <form action="" method="post">
+        {% csrf_token %}
+  
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="addEmployeeModal">Employee List</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+
+          <div class="">
+            <label for="firstname" >First Name</label>
+            <input type="text" name="firstname" class="form-control" id="firstname" required>
+          </div>
+
+          <div class="">
+            <label for="middlename" >Middle Name</label>
+            <input type="text" name="middlename" class="form-control" id="middlename" required>
+          </div>
+
+          <div class="">
+            <label for="lastname" >Last Name</label>
+            <input type="text" name="lastname" class="form-control" id="lastname" required>
+          </div>
+
+          <div class="">
+            <label for="branch">Branch</label>
+            <input type="text" name="branch" class="form-control" id="branch" required>
+          </div>
+
+         
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" name="add">Add New Employee</button>
+        </div>
+      </div>
+    </form>
+    </div>
+  </div>
+  
+
+
+
+
+
+
+
+
+
+
+
+                        <div class="d-flex justify-content-start">
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination">
+                                    {% if student_list.has_previous %}
+                                        <li class="page-item"><a class="page-link" href="?page=1">First</a></li>
+                                        <li class="page-item"><a class="page-link" href="?page={{ student_list.previous_page_number }}">Previous</a></li>
+                                    {% endif %}
+                        
+                                    {% for i in student_list.paginator.page_range %}
+                                        <li class="page-item{% if student_list.number == i %} active{% endif %}">
+                                            <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                                        </li>
+                                    {% endfor %}
+                        
+                                    {% if student_list.has_next %}
+                                        <li class="page-item"><a class="page-link" href="?page={{ student_list.next_page_number }}">Next</a></li>
+                                        <li class="page-item"><a class="page-link" href="?page={{ student_list.paginator.num_pages }}">Last</a></li>
+                                    {% endif %}
+                                </ul>
+                            </nav>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div> <!-- row -->
+
+    </div> <!-- container-fluid -->
+</div>
+
+
+
+{% if messages %}
+    {% for message in messages %}
+        {% if 'added' in message.tags %}
+            <script>
+                swal({
+                    title: "Added!",
+                    text: "{{ message }}",
+                    icon: "success",
+                });
+            </script>
+
+
+        {% elif 'updated' in message.tags %}
+            <script>
+                swal({
+                    title: "Updated!",
+                    text: "{{ message }}",
+                    icon: "success",
+                });
+            </script>
+
+        {% elif 'error' in message.tags %}
+            <script>
+                swal({
+                    title: "Updated!",
+                    text: "{{ message }}",
+                    icon: "error",
+                });
+            </script>
+
+
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+
+
+
+
+
+
+
+{% endblock content %}
+

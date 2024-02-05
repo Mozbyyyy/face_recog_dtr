@@ -1,0 +1,17 @@
+{% extends "temp_myapp/base.html" %}
+{% load static %}
+{% block content %}
+{% include 'temp_myapp/navbar.html' %}
+
+<h1>DBF to SQL</h1>
+
+<form method="post" enctype="multipart/form-data" action="{% url 'dbf_to_sql' %}">
+    {% csrf_token %}
+    <label for="dbf_file">Upload DBF File:</label>
+    <input type="file" name="dbf_file" accept=".dbf" required>
+    <button type="submit">Import</button>
+</form>
+
+
+
+{% endblock content %}

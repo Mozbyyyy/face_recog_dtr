@@ -1,0 +1,184 @@
+{% extends "temp_myapp/base.html" %}
+{% load static %}
+
+{% block content %}
+  {% include 'temp_myapp/navbar.html' %}
+
+
+<style>
+    .table-container {
+        max-height: 700px;
+        overflow-y: auto;
+    }
+</style>
+
+
+<div class="container mt-5">
+    <div class="row">
+        <!-- Left Column for Import Data Form -->
+        <div class="col-md-5">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="mb-4 text-center" style="font-size:1.5rem;font-weight: bold;">IMPORT DATA</h2>
+
+                    <form method="post" action="{% url 'import_data' %}">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="{{ form.date.id_for_label }}" class="form-label" style="font-size: 1.2rem;">SELECT DATE:</label>
+                            <input type="date" class="form-control form-control-lg" id="{{ form.date.id_for_label }}" name="{{ form.date.name }}">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-lg btn-block mt-3">Import</button>
+                    </form>
+
+                </div>
+            </div>
+
+
+
+            <div class="container mt-5">
+                <div class="row">
+
+                    <div class="col-md-17">
+                        <div class="card">
+                            <div class="card-body">
+                                <h2 class="mb-4 text-center" style="font-size:1.5rem;font-weight: bold;">SINGLE IMPORT</h2>
+
+                                <form method="post" action="{% url 'import_single_file' %}" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <input type="file" class="form-control-file" id="id_file" name="file" accept=".encrypted">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-lg btn-block mt-3">Import</button>
+                                </form>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <!-- Right Column for Table -->
+        <div class="col-md-7" style="position: relative;left:3rem;">
+            <div class="table-container card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="defaultdatatable" class="table table-bordered table-hover table-striped tables">
+                            <thead>
+                                <tr>
+                                    <th>NAME</th>
+                                    <th>DATE</th>
+                                    <th>BRANCH NAME</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+
+    function ImportList() {
+        $.ajax({
+            url: '{% url "display_import_list" %}',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                var tableBody = $('#defaultdatatable tbody');
+                tableBody.empty(); // Clear previous table data
+
+                data.attendances.forEach(function (attendance) {
+                    var row = $('<tr>');
+                    row.append('<td>' + attendance.name + '</td>');
+                    row.append('<td>' + attendance.date + '</td>');
+                    row.append('<td>' + attendance.branch_name + '</td>');
+                    tableBody.append(row);
+                });
+            },
+            error: function (error) {
+                console.error('Error fetching attendance data:', error);
+            }
+        });
+    }
+
+    // Call ImportList initially
+    ImportList();
+
+    // Use setInterval to update the table every 2000 milliseconds (2 seconds)
+    setInterval(ImportList, 1000);
+
+
+</script>
+
+
+{% if messages %}
+    {% for message in messages %}
+        {% if 'importAll' in message.tags %}
+            <script>
+                swal({
+                    title: "Import Successfully!",
+                    text: "{{ message }}",
+                    icon: "success",
+                });
+            </script>
+
+
+        {% elif 'singleImport' in message.tags %}
+            <script>
+                swal({
+                    title: "Import Successfully!",
+                    text: "{{ message }}",
+                    icon: "success",
+                });
+            </script>
+
+        {% elif 'ErrorAlert' in message.tags %}
+            <script>
+                swal({
+                    title: "Error!",
+                    text: "{{ message }}",
+                    icon: "error",
+                });
+            </script>
+
+        {% elif 'singleImportDuplicate' in message.tags %}
+            <script>
+                swal({
+                    title: "Error!",
+                    text: "{{ message }}",
+                    icon: "error",
+                });
+            </script>
+
+        {% elif 'singleImportError' in message.tags %}
+            <script>
+                swal({
+                    title: "Error!",
+                    text: "{{ message }}",
+                    icon: "error",
+                });
+            </script>
+
+
+
+     {% endif %}
+    {% endfor %}
+{% endif %}
+
+
+
+
+{% endblock content %}

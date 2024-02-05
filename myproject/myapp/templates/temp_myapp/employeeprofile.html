@@ -1,0 +1,28 @@
+{% extends "temp_myapp/base.html" %}
+{% load static %}
+{% block content %}
+
+<h1>User Profile</h1>
+
+<dl>
+    <dt>Code:</dt>
+    <dd>{{ student.code }}</dd>
+
+    <dt>First Name:</dt>
+    <dd>{{ student.firstname }}</dd>
+
+    <dt>Middle Name:</dt>
+    <dd>{{ student.middlename }}</dd>
+
+    <dt>Last Name:</dt>
+    <dd>{{ student.lastname }}</dd>
+
+    <dt>Branch:</dt>
+    <dd>{{ student.branch }}</dd>
+</dl>
+
+<!-- Add any additional information you want to display -->
+
+<a href="{% url 'addemployee' %}" class="btn btn-primary">Back to Employee List</a>
+
+{% endblock content %}

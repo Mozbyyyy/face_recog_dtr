@@ -1,0 +1,31 @@
+:root{
+    --darkblue: #2c4050;
+}
+#videoElement{
+    position: relative;
+    top:7rem;
+    left:.5rem;
+    border:8px solid var(--darkblue);
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.video-container {
+    flex: 1; /* Take up available space */
+    margin-right: 20px; /* Adjust margin between image and table */
+}
+
+.table-container {
+    flex: 1; /* Take up available space */
+    overflow: auto; /* Enable scrolling if the table is larger than the container */
+    margin-left: 3rem;
+    width: 20rem;
+    position: relative;
+    top:5rem;
+    left:5rem;
+    
+}

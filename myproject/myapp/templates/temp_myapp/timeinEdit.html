@@ -1,0 +1,107 @@
+{% extends "temp_myapp/base.html" %}
+{% load static %}
+
+{% block content %}
+{% include 'temp_myapp/navbar.html' %}
+
+<head>   <link rel="stylesheet" type="text/css" href="{% static 'css/editEmployee.css' %}"></head>
+
+
+
+
+
+
+
+<div class="content-wrapper">
+    <div class="container-fluid">
+        <div class="row pt-2 pb-2">
+            <div class="col-sm-12 mt-3">
+                <h2 class="page-title">EDIT TIMEIN</h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <div class="row">
+                            <div class="col-lg-10">
+                                <div class="d-flex justify-content-start">
+                                    <button type="button" class="btn btn-primary btn-round waves-effect waves-light m-1" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">
+                                        <i class="fa fa-plus"></i> <span>&nbsp;ADD EMPLOYEE</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            
+                            <div class="col-lg-2">
+                                <div class="d-flex justify-content-end">
+                                    <form action="" method="post" class="d-flex">
+                                        {% csrf_token %}
+                                        <input type="search" class="form-control me-2" name="searchquery" value="{{ query }}">
+                                        <button class="btn btn-primary" name="search">Search</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                                      
+                        
+
+                    </div>
+
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="defaultdatatable" class="table table-bordered table-hover table-striped tables">
+                                <thead>
+                                    <tr>
+                                        <th>NAME</th>
+                                        <th>TIME IN</th>
+                                        <th>TIME OUT</th>
+                                        <th>BREAK OUT</th>
+                                        <th>BREAK IN </th>
+                                       
+                                    </tr>
+                                </thead>
+                                <tbody>
+                               
+                                    <tr>
+
+                                        <td>{{ user.code }}</td>
+                                        <td>{{ user.firstname }}</td>
+                                        <td>{{ user.middlename }}</td>
+                                        <td>{{ user.lastname }}</td>
+                                     
+                                        <td>
+                                            
+                                               
+                                        
+
+                                           <span class="material-symbols-outlined btn btn-primary edit-btn" data-bs-toggle="modal" data-bs-target="#updateEmployeeModal_{{user.id}}">
+                                                edit
+                                           </span>
+                                         
+
+                                            <span class="material-symbols-outlined btn btn-danger delete-btn" data-bs-toggle="modal" data-bs-target="#deleteEmployeeModal_{{user.id}}">
+                                                    delete
+                                            </span>
+                                                    <!-- nov 28 -->
+
+                                                
+                                        </td>
+
+                                    </tr>
+                          
+                            
+                        </div>
+
+
+
+
+</div>
+</div>
+
+
+
+{% endblock content %}
